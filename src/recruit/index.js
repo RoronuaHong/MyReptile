@@ -26,7 +26,7 @@ app.all(`/`, (req, res, next) => {
                     city: `上海`,
                     needAddtionalResult: false,
                     first: true,
-                    pn: 1,
+                    pn: 10,
                     kd: `${post}`
                 }
             }, (err, sres, datas) => {
