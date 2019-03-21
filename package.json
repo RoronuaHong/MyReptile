@@ -1,0 +1,29 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "node-dev src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RoronuaHong/MyReptile.git"
+  },
+  "author": "SlimHong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RoronuaHong/MyReptile/issues"
+  },
+  "homepage": "https://github.com/RoronuaHong/MyReptile#readme",
+  "devDependencies": {
+    "express": "^4.16.4"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "superagent": "^4.1.0",
+    "superagent-charset": "^1.2.0"
+  }
+}
