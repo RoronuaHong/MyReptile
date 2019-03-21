@@ -13,69 +13,66 @@ app.all(`/`, (req, res, next) => {
     const url_start = `https://www.lagou.com/jobs/list_${post}?city=%E4%B8%8A%E6%B5%B7&cl=false&fromSearch=true&labelWords=&suginput=`
     const url_parse = `https://www.lagou.com/jobs/positionAjax.json`
 
-    request({
-        url: url_start,
-        method: `GET`,
-    }, (err, sres, data) => {
-        if(!err && sres.statusCode == 200) {
-            request({
-                url: url_parse,
-                method: `POST`,
-                // headers: {
-                //     Host: `www.lagou.com`,
-                //     Origin: `https://www.lagou.com`,
-                //     Referer: `https://www.lagou.com/jobs/list_${post}?labelWords=&fromSearch=true&suginput=?labelWords=hot`,
-                //     Cookie: sres.headers[`set-cookie`]
-                // },  
-                qs: {
-                    city: `上海`,
-                    needAddtionalResult: false,
-                    first: true,
-                    pn: 10,
-                    kd: `${post}`
-                }
-            }, (err, tres, datas) => {
-                if(!err && tres.statusCode == 200) {
-                    let items = []
-                    let positionArr = []
-                    const dataArray = JSON.parse(datas).content ? JSON.parse(datas).content.positionResult.result : []
+    
 
-                    dataArray.forEach(l => {
-                        positionArr = [...positionArr, `https://www.lagou.com/jobs/${l.positionId}.html`]
-                    })
+    // request({
+    //     url: url_start,
+    //     method: `GET`,
+    // }, (err, sres, data) => {
+    //     if(!err && sres.statusCode == 200) {
+    //         request({
+    //             url: url_parse,
+    //             method: `POST`,
+    //             headers: {
+    //                 Host: `www.lagou.com`,
+    //                 Origin: `https://www.lagou.com`,
+    //                 Referer: `https://www.lagou.com/jobs/list_${post}?labelWords=&fromSearch=true&suginput=?labelWords=hot`,
+    //                 Cookie: sres.headers[`set-cookie`]
+    //             },  
+    //             qs: {
+    //                 city: `上海`,
+    //                 needAddtionalResult: false,
+    //                 first: true,
+    //                 pn: 10,
+    //                 kd: `${post}`
+    //             }
+    //         }, (err, tres, datas) => {
+    //             if(!err && tres.statusCode == 200) {
+    //                 let items = []
+    //                 let positionArr = []
+    //                 const dataArray = JSON.parse(datas).content ? JSON.parse(datas).content.positionResult.result : []
 
-                    //TODO: 无法将内部内容输出到外部
-                    let promises = positionArr.map(item => {
-                        return new Promise(resolve => superagent.get(`https://www.lagou.com/jobs/${item}.html`)
-                            .buffer(true)
-                            .end((err, fres) => {
-                                //常用的错误处理 
-                                if(err) {
-                                    return next(err)
-                                }
+    //                 dataArray.forEach(l => {
+    //                     positionArr = [...positionArr, `https://www.lagou.com/jobs/${l.positionId}.html`]
+    //                 })
 
-                                let $ = cheerio.load(fres.text, { decodeEntities: false })
-                                let jobDetail = ``
+    //                 //TODO: 无法将内部内容输出到外部
+    //                 positionArr.forEach(item => {
+    //                     superagent.get(item)
+    //                         .buffer(true)
+    //                         .end((err, fres) => {
+    //                             //常用的错误处理 
+    //                             if(err) {
+    //                                 return next(err)
+    //                             }
 
-                                $(`.job-detail p`).each((idx, ele) => jobDetail += $(ele).html())
+    //                             let $ = cheerio.load(fres.text, { decodeEntities: false })
+    //                             let jobDetail = ``
 
-                                items.push({
-                                    jobDetail,
-                                    companyName: $(`.job_company_content .fl-cn`).html()
-                                })
+    //                             $(`.job-detail p`).each((idx, ele) => jobDetail += $(ele).html())
 
-                                resolve(items) 
-                            }))
-                    })
+    //                             items.push({
+    //                                 jobDetail,
+    //                                 companyName: $(`.job_company_content .fl-cn`).html() || ''
+    //                             })
+    //                         })
+    //                     })
 
-                    // Promise.all(promises).then(data => {
-                    //     res.send(items)
-                    // })
-                    res.send(datas)
-                }
-            })
-        }
-    })
+    //                     res.send(datas)
+    //             }
+    //         })
+    //     }
+    // })
 })
 
 app.listen(3006, () => {
