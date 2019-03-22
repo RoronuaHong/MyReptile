@@ -76,48 +76,54 @@ function getList(arr) {
                         reject(err)
                     }
 
-                    let $ = cheerio.load(fres.text, { decodeEntities: false })
-                    let jobRequirement = ``
-                    let jobDetail = ``
-
-                    const jobName = $(`.job-name`).prop(`title`)
-                    const releaseTime = $(`.publish_time`).html()
-                    const companyName = $(`.job_company_content .fl-cn`).html().trim() || ''
-                    const addressLen = $(`.work_addr`).contents().filter((i, con) => con.nodeType === 3).length 
-                    const address = $(`.work_addr`).contents().filter((i, con) => con.nodeType === 3)[addressLen - 2].nodeValue.trim()
-                    const typeOfBusiness = $(`.c_feature li:nth-child(1)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim()
-                    const numberOfPeople = $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim() ? 
-                        $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim() :
-                        $(`.c_feature li:nth-child(4)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim()
-
-                        
-                    jobRequirement += $(`.job-advantage p`).html() + `</br>`
-                    jobRequirement += $(`.job-detail`).html()
-                        
-                    $(`.job_request span`).each((i, l) => {
-                        jobDetail += $(l).html()
-                    })
-
-                    const param = {
-                        job: {
-                            jobName,
-                            jobDetail,
-                            jobRequirement,
-                        },
-                        detail: {
-                            releaseTime,
-                            companyName,
-                            typeOfBusiness,
-                            numberOfPeople,
-                            address
-                        },
-                        url: `https://www.lagou.com/jobs/${item.positionId}.html`
-                    }
+                    const param = getInfo(item, fres)
 
                     resolve(param)
                 })
         })
     })
+}
+
+const getInfo = (item, res) => {
+    let $ = cheerio.load(res.text, { decodeEntities: false })
+    let jobRequirement = ``
+    let jobDetail = ``
+
+    const jobName = $(`.job-name`).prop(`title`)
+    const releaseTime = $(`.publish_time`).html()
+    const companyName = $(`.job_company_content .fl-cn`).html().trim() || ''
+    const addressLen = $(`.work_addr`).contents().filter((i, con) => con.nodeType === 3).length
+    const address = $(`.work_addr`).contents().filter((i, con) => con.nodeType === 3)[addressLen - 2].nodeValue.trim()
+    const typeOfBusiness = $(`.c_feature li:nth-child(1)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim()
+    const numberOfPeople = $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim() ?
+        $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim() :
+        $(`.c_feature li:nth-child(4)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim()
+
+
+    jobRequirement += $(`.job-advantage p`).html() + `</br>`
+    jobRequirement += $(`.job-detail`).html()
+
+    $(`.job_request span`).each((i, l) => {
+        jobDetail += $(l).html()
+    })
+
+    const param = {
+        job: {
+            jobName,
+            jobDetail, 
+            jobRequirement,
+        },
+        detail: {
+            releaseTime,
+            companyName,
+            typeOfBusiness,
+            numberOfPeople,
+            address
+        },
+        url: `https://www.lagou.com/jobs/${item.positionId}.html`
+    }
+
+    return param
 }
 
 const post = `react`
