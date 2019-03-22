@@ -90,10 +90,13 @@ function getList(arr) {
                         $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim() :
                         $(`.c_feature li:nth-child(4)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim()
 
-                    $(`.job_request p span`).map(l => jobDetail += console.log(l))
- 
+                        
                     jobRequirement += $(`.job-advantage p`).html() + `</br>`
                     jobRequirement += $(`.job-detail`).html()
+                        
+                    $(`.job_request span`).each((i, l) => {
+                        jobDetail += $(l).html()
+                    })
 
                     const param = {
                         job: {
