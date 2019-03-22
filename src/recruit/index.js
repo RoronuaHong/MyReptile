@@ -75,15 +75,18 @@ function getList(arr) {
                     if(err) {
                         reject(err)
                     }
-    
+
                     let $ = cheerio.load(fres.text, { decodeEntities: false })
                     let jobDetail = ``
-    
+                    const companyName = $(`.job_company_content .fl-cn`).html() || ''
+                    const numberOfPeople = $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue || ''
+
                     $(`.job-detail p`).each((idx, ele) => jobDetail += $(ele).html())
-    
+
                     resolve({
                         jobDetail,
-                        companyName: $(`.job_company_content .fl-cn`).html() || ''
+                        companyName,
+                        numberOfPeople
                     })
                 })
         })
