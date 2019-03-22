@@ -71,23 +71,47 @@ function getList(arr) {
             superagent.get(`https://www.lagou.com/jobs/${item.positionId}.html`)
                 .buffer(true)
                 .end((err, fres) => {
-                    //常用的错误处理 
+                    //常用的错误处理
                     if(err) {
                         reject(err)
                     }
 
                     let $ = cheerio.load(fres.text, { decodeEntities: false })
+                    let jobRequirement = ``
                     let jobDetail = ``
-                    const companyName = $(`.job_company_content .fl-cn`).html() || ''
-                    const numberOfPeople = $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue || ''
 
-                    $(`.job-detail p`).each((idx, ele) => jobDetail += $(ele).html())
+                    const jobName = $(`.job-name`).prop(`title`)
+                    const releaseTime = $(`.publish_time`).html()
+                    const companyName = $(`.job_company_content .fl-cn`).html().trim() || ''
+                    const addressLen = $(`.work_addr`).contents().filter((i, con) => con.nodeType === 3).length 
+                    const address = $(`.work_addr`).contents().filter((i, con) => con.nodeType === 3)[addressLen - 2].nodeValue.trim()
+                    const typeOfBusiness = $(`.c_feature li:nth-child(1)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim()
+                    const numberOfPeople = $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim() ? 
+                        $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim() :
+                        $(`.c_feature li:nth-child(4)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim()
 
-                    resolve({
-                        jobDetail,
-                        companyName,
-                        numberOfPeople
-                    })
+                    $(`.job_request p span`).map(l => jobDetail += console.log(l))
+ 
+                    jobRequirement += $(`.job-advantage p`).html() + `</br>`
+                    jobRequirement += $(`.job-detail`).html()
+
+                    const param = {
+                        job: {
+                            jobName,
+                            jobDetail,
+                            jobRequirement,
+                        },
+                        detail: {
+                            releaseTime,
+                            companyName,
+                            typeOfBusiness,
+                            numberOfPeople,
+                            address
+                        },
+                        url: `https://www.lagou.com/jobs/${item.positionId}.html`
+                    }
+
+                    resolve(param)
                 })
         })
     })
@@ -104,10 +128,13 @@ app.get(`/`, (req, res, next) => {
         const list = await getPositionList(url_parse, cookie, post)
         const dataArray = JSON.parse(list).content ? JSON.parse(list).content.positionResult.result : []
         const promises = getList(dataArray)
-        
-        Promise.all(promises).then(data => {
-            res.send(data)
+
+        Promise.all(promises).then(datas => {
+            res.send(datas)
         })
+
+        //TODO: 判断是否操作太过频繁
+        // res.send(list)
     })()
 })
 
