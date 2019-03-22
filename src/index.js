@@ -13,7 +13,7 @@ app.all('/', (req, res, next) => {
         .buffer(true)
         .end((err, sres) => {
             //常用的错误处理
-            if (err) {
+            if(err) {
                 return next(err)
             }
 
