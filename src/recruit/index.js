@@ -13,7 +13,7 @@ const startOption = url => ({
     method: `GET`,
 })
 
-const secondOption = (url, Cookie, post) => ({
+const secondOption = (url, Cookie, post, pn) => ({
     url,
     method: `POST`,
     headers: {
@@ -21,13 +21,13 @@ const secondOption = (url, Cookie, post) => ({
         Origin: `https://www.lagou.com`,
         Referer: `https://www.lagou.com/jobs/list_${post}?labelWords=&fromSearch=true&suginput=?labelWords=hot`,
         Cookie
-    },  
+    },
     qs: {
-        city: `上海`,
         needAddtionalResult: false,
+        kd: `${post}`,
+        city: `上海`, 
         first: true,
-        pn: 10,
-        kd: `${post}`
+        pn
     }
 })
 
@@ -36,7 +36,7 @@ async function getCookie(url) {
 
     return new Promise((resolve, reject) => {
         const option = startOption(url)
-
+ 
         request(option, (err, sres, data) => {
             if(!err && sres.statusCode == 200) {
                 resolve([data, sres])
@@ -47,11 +47,11 @@ async function getCookie(url) {
     })
 }
 
-async function getPositionList(url, cookie, post) {
+async function getPositionList(url, cookie, post, pn) {
     console.log('-------- start retriving positionList --------')
-
+ 
     return new Promise((resolve, reject) => {
-        const option = secondOption(url, cookie, post)
+        const option = secondOption(url, cookie, post, pn)
 
         request(option, (err, sres, data) => {
             if(!err && sres.statusCode == 200) {
@@ -67,24 +67,26 @@ function getList(arr) {
     console.log(`-------- combine api --------`)
 
     return arr.map(item => {
+        const positionId = item.positionId
+
         return new Promise((resolve, reject) => {
-            superagent.get(`https://www.lagou.com/jobs/${item.positionId}.html`)
+            superagent.get(`https://www.lagou.com/jobs/${positionId}.html`)
                 .buffer(true)
-                .end((err, fres) => {
-                    //常用的错误处理
+                .end((err, res) => {
+                    // 常用的错误处理 
                     if(err) {
                         reject(err)
                     }
 
-                    const param = getInfo(item, fres)
-
+                    const param = getInfo(positionId, res)
+ 
                     resolve(param)
                 })
         })
     })
 }
 
-const getInfo = (item, res) => {
+const getInfo = (positionId, res) => {
     let $ = cheerio.load(res.text, { decodeEntities: false })
     let jobRequirement = ``
     let jobDetail = ``
@@ -108,9 +110,10 @@ const getInfo = (item, res) => {
     })
 
     const param = {
+        positionId,
         job: {
             jobName,
-            jobDetail, 
+            jobDetail,
             jobRequirement,
         },
         detail: {
@@ -120,7 +123,7 @@ const getInfo = (item, res) => {
             numberOfPeople,
             address
         },
-        url: `https://www.lagou.com/jobs/${item.positionId}.html`
+        url: `https://www.lagou.com/jobs/${positionId}.html`
     }
 
     return param
@@ -131,10 +134,12 @@ const url_start = `https://www.lagou.com/jobs/list_${post}?city=%E4%B8%8A%E6%B5%
 const url_parse = `https://www.lagou.com/jobs/positionAjax.json`
 
 app.get(`/`, (req, res, next) => {
-    (async function() {
+    (async () => {
+        let pn = 1
+
         const [data, sres] = await getCookie(url_start)
         const cookie = sres.headers[`set-cookie`]
-        const list = await getPositionList(url_parse, cookie, post)
+        const list = await getPositionList(url_parse, cookie, post, pn)
         const dataArray = JSON.parse(list).content ? JSON.parse(list).content.positionResult.result : []
         const promises = getList(dataArray)
 
