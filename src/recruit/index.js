@@ -1,6 +1,7 @@
 const express = require(`express`)
 const request = require(`request`)
 const cheerio = require(`cheerio`)
+const async = require(`async`)
 const superagent = require(`superagent`)
 const charset = require(`superagent-charset`)
 
@@ -36,12 +37,15 @@ async function getCookie(url) {
 
     return new Promise((resolve, reject) => {
         const option = startOption(url)
- 
+
         request(option, (err, sres, data) => {
-            if(!err && sres.statusCode == 200) {
+            if(!err && sres.statusCode === 200 && data.indexOf('安全访问验证') <= -1) {
                 resolve([data, sres])
             } else {
-                console.log(err)
+                let $ = cheerio.load(data, { decodeEntities: false })
+ 
+                console.log($(`#captcha`).prop(`src`))
+                console.log($(`#captcha`).prop(`alt`))
             }
         })
     })
@@ -57,23 +61,47 @@ async function getPositionList(url, cookie, post, pn) {
             if(!err && sres.statusCode == 200) {
                 resolve(data)
             } else {
-                console.log(err)
+                console.log(`出错: `, err)
             }
         })
+    })
+}
+
+const fetchUrl = (url, callback) => {
+    superagent.get(url)
+        .end((err, res) => {
+            // 常用的错误处理
+            if(err) {
+                console.log(err)
+            }
+
+            const param = getInfos(url, res)
+
+            callback(null, param)
+        })
+}
+
+const getMapLimit = (arrs, num, res) => {
+    const urls = arrs.map(l => (`https://www.lagou.com/jobs/${l.positionId}.html`))
+
+    async.mapLimit(urls, num, (url, callback) => {
+        fetchUrl(url, callback)
+    }, (err, results) => {
+        res.send(results) 
     })
 }
 
 function getList(arr) {
     console.log(`-------- combine api --------`)
 
-    return arr.map(item => {
-        const positionId = item.positionId
+    return arrs.map(item => {
+        const positionId = item.positionId 
 
         return new Promise((resolve, reject) => {
             superagent.get(`https://www.lagou.com/jobs/${positionId}.html`)
                 .buffer(true)
                 .end((err, res) => {
-                    // 常用的错误处理 
+                    //常用的错误处理
                     if(err) {
                         reject(err)
                     }
@@ -84,6 +112,48 @@ function getList(arr) {
                 })
         })
     })
+}
+
+const getInfos = (url, res) => {
+    let $ = cheerio.load(res.text, { decodeEntities: false })
+    let jobRequirement = ``
+    let jobDetail = ``
+
+    const jobName = $(`.job-name`).prop(`title`)
+    const releaseTime = $(`.publish_time`).html()
+    const companyName = $(`.job_company_content .fl-cn`).html().trim() || ''
+    const addressLen = $(`.work_addr`).contents().filter((i, con) => con.nodeType === 3).length
+    const address = $(`.work_addr`).contents().filter((i, con) => con.nodeType === 3)[addressLen - 2].nodeValue.trim()
+    const typeOfBusiness = $(`.c_feature li:nth-child(1)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim()
+    const numberOfPeople = $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim() ?
+        $(`.c_feature li:nth-child(3)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim() :
+        $(`.c_feature li:nth-child(4)`).contents().filter((i, con) => con.nodeType === 3)[1].nodeValue.trim()
+
+
+    jobRequirement += $(`.job-advantage p`).html() + `</br>`
+    jobRequirement += $(`.job-detail`).html()
+
+    $(`.job_request span`).each((i, l) => {
+        jobDetail += $(l).html()
+    })
+
+    const param = {
+        job: {
+            jobName,
+            jobDetail,
+            jobRequirement,
+        },
+        detail: {
+            releaseTime,
+            companyName,
+            typeOfBusiness,
+            numberOfPeople,
+            address
+        },
+        url
+    }
+
+    return param
 }
 
 const getInfo = (positionId, res) => {
@@ -119,7 +189,7 @@ const getInfo = (positionId, res) => {
         detail: {
             releaseTime,
             companyName,
-            typeOfBusiness,
+            typeOfBusiness, 
             numberOfPeople,
             address
         },
@@ -136,7 +206,8 @@ const url_parse = `https://www.lagou.com/jobs/positionAjax.json`
 app.get(`/`, (req, res, next) => {
     (async () => {
         let pn = 1
-
+ 
+        const num = 2 
         const [data, sres] = await getCookie(url_start)
         const cookie = sres.headers[`set-cookie`]
         const list = await getPositionList(url_parse, cookie, post, pn)
@@ -147,6 +218,7 @@ app.get(`/`, (req, res, next) => {
             res.send(datas)
         })
 
+        getMapLimit(dataArray, num, res)
         //TODO: 判断是否操作太过频繁
         // res.send(list)
     })()
