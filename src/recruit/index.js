@@ -40,6 +40,7 @@ async function getCookie(url) {
     return new Promise((resolve, reject) => {
         const option = startOption(url)
 
+        //TODO: 使用nightmare获取动态加载的验证码图片
         nightmare.goto(url)
             .wait(1000)
             .end()
