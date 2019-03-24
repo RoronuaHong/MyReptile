@@ -2,10 +2,12 @@ const express = require(`express`)
 const request = require(`request`)
 const cheerio = require(`cheerio`)
 const async = require(`async`)
+const Nightmare = require(`nightmare`)
 const superagent = require(`superagent`)
 const charset = require(`superagent-charset`)
 
 const app = express()
+const nightmare = Nightmare()
 
 charset(superagent)
 
@@ -38,16 +40,22 @@ async function getCookie(url) {
     return new Promise((resolve, reject) => {
         const option = startOption(url)
 
-        request(option, (err, sres, data) => {
-            if(!err && sres.statusCode === 200 && data.indexOf('安全访问验证') <= -1) {
-                resolve([data, sres])
-            } else {
-                let $ = cheerio.load(data, { decodeEntities: false })
+        nightmare.goto(url)
+            .wait(1000)
+            .end()
+            .then(data => {
+                console.log(data)
+            })
+        // request(option, (err, sres, data) => {
+        //     if(!err && sres.statusCode === 200 && data.indexOf('安全访问验证') <= -1) {
+        //         resolve([data, sres])
+        //     } else {
+        //         let $ = cheerio.load(data, { decodeEntities: false })
  
-                console.log($(`#captcha`).prop(`src`))
-                console.log($(`#captcha`).prop(`alt`))
-            }
-        })
+        //         console.log($(`#captcha`).prop(`src`))
+        //         console.log($(`#captcha`).prop(`alt`))
+        //     }
+        // })
     })
 }
 
