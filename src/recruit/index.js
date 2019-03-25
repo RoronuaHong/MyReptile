@@ -41,22 +41,22 @@ async function getCookie(url) {
         const option = startOption(url)
 
         //TODO: 使用nightmare获取动态加载的验证码图片
-        nightmare.goto(url)
-            .wait(1000)
-            .end()
-            .then(data => {
-                console.log(data)
-            })
-        // request(option, (err, sres, data) => {
-        //     if(!err && sres.statusCode === 200 && data.indexOf('安全访问验证') <= -1) {
-        //         resolve([data, sres])
-        //     } else {
-        //         let $ = cheerio.load(data, { decodeEntities: false })
+        // nightmare.goto(url)
+        //     .wait(1000)
+        //     .end()
+        //     .then(data => {
+        //         console.log(data)
+        //     })
+        request(option, (err, sres, data) => {
+            if(!err && sres.statusCode === 200 && data.indexOf('安全访问验证') <= -1) {
+                resolve([data, sres])
+            } else {
+                let $ = cheerio.load(data, { decodeEntities: false })
  
-        //         console.log($(`#captcha`).prop(`src`))
-        //         console.log($(`#captcha`).prop(`alt`))
-        //     }
-        // })
+                console.log($(`#captcha`).prop(`src`))
+                console.log($(`#captcha`).prop(`alt`))
+            }
+        })
     })
 }
 
@@ -103,7 +103,7 @@ const getMapLimit = (arrs, num, res) => {
 function getList(arr) {
     console.log(`-------- combine api --------`)
 
-    return arrs.map(item => {
+    return arr.map(item => {
         const positionId = item.positionId 
 
         return new Promise((resolve, reject) => {
@@ -221,11 +221,11 @@ app.get(`/`, (req, res, next) => {
         const cookie = sres.headers[`set-cookie`]
         const list = await getPositionList(url_parse, cookie, post, pn)
         const dataArray = JSON.parse(list).content ? JSON.parse(list).content.positionResult.result : []
-        const promises = getList(dataArray)
+        // const promises = getList(dataArray)
 
-        Promise.all(promises).then(datas => {
-            res.send(datas)
-        })
+        // Promise.all(promises).then(datas => {
+        //     res.send(datas)
+        // })
 
         getMapLimit(dataArray, num, res)
         //TODO: 判断是否操作太过频繁
