@@ -7,7 +7,16 @@ const superagent = require(`superagent`)
 const charset = require(`superagent-charset`)
 
 const app = express()
-const nightmare = Nightmare()
+const nightmare = Nightmare({
+    openDevTools: {
+        mode: 'right',          // 开发者工具位置：right, bottom, undocked, detach
+    },
+    show: true,                 // 要不要显示浏览器
+    dock: true,                 // 要不要在Dock上显示图标
+    waitTimeout: 60000,         // .wait() 方法超时时长，单位:ms
+    executionTimeout: 86400000, // .evaluate() 方法超时时长，单位:ms 
+    fullscreen: true
+})
 
 charset(superagent)
 
@@ -40,23 +49,28 @@ async function getCookie(url) {
     return new Promise((resolve, reject) => {
         const option = startOption(url)
 
-        //TODO: 使用nightmare获取动态加载的验证码图片
-        // nightmare.goto(url)
-        //     .wait(1000)
-        //     .end()
-        //     .then(data => {
-        //         console.log(data)
-        //     })
-        request(option, (err, sres, data) => {
-            if(!err && sres.statusCode === 200 && data.indexOf('安全访问验证') <= -1) {
-                resolve([data, sres])
-            } else {
-                let $ = cheerio.load(data, { decodeEntities: false })
+        // TODO: 使用nightmare获取动态加载的验证码图片 
+        nightmare.goto(url)
+            .type(`#code`, `1234`)
+            .wait(`.content a`)
+            .evaluate((res) => {
+                const img = $(`.container #captcha`).prop(`src`)
+                console.log(img)
+            })  
+            .end()
+            .then(data => { 
+                console.log('result:', data)
+            })     
+        // request(option, (err, sres, data) => {
+        //     if(!err && sres.statusCode === 200 && data.indexOf('安全访问验证') <= -1) {
+        //         resolve([data, sres])
+        //     } else {
+        //         let $ = cheerio.load(data, { decodeEntities: false })
  
-                console.log($(`#captcha`).prop(`src`))
-                console.log($(`#captcha`).prop(`alt`))
-            }
-        })
+        //         console.log($(`#captcha`).prop(`src`))
+        //         console.log($(`#captcha`).prop(`alt`))
+        //     }
+        // })
     })
 }
 
