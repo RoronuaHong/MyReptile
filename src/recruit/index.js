@@ -49,28 +49,80 @@ async function getCookie(url) {
     return new Promise((resolve, reject) => {
         const option = startOption(url)
 
-        // TODO: 使用nightmare获取动态加载的验证码图片 
-        nightmare.goto(url)
-            .type(`#code`, `1234`)
-            .wait(`.content a`)
-            .evaluate((res) => {
-                const img = $(`.container #captcha`).prop(`src`)
-                console.log(img)
-            })  
-            .end()
-            .then(data => { 
-                console.log('result:', data)
-            })     
-        // request(option, (err, sres, data) => {
-        //     if(!err && sres.statusCode === 200 && data.indexOf('安全访问验证') <= -1) {
-        //         resolve([data, sres])
-        //     } else {
-        //         let $ = cheerio.load(data, { decodeEntities: false })
- 
-        //         console.log($(`#captcha`).prop(`src`))
-        //         console.log($(`#captcha`).prop(`alt`))
-        //     }
-        // })
+        // // TODO: 使用nightmare获取动态加载的验证码图片 
+        // nightmare.goto(url)
+        //     .type(`#code`, `1234`)
+        //     .wait(`.content a`)
+        //     .evaluate((res) => {
+        //         const img = $(`.container #captcha`).prop(`src`)
+        //         console.log(img)
+        //     })  
+        //     .end()
+        //     .then(data => { 
+        //         console.log('result:', data)
+        //     })     
+        request(option, (err, sres, data) => {
+            if(!err && sres.statusCode === 200 && data.indexOf('安全访问验证') <= -1) {
+                resolve([data, sres])
+            } else {
+                // let $ = cheerio.load(data, { decodeEntities: false })
+                
+                // console.log($(`#captcha`).prop(`src`))
+                // console.log($(`#captcha`).prop(`alt`))
+
+                // TODO: 使用nightmare获取列表
+                
+                nightmare.goto(url)
+                // .wait(`.item_con_list .con_list_item`)
+                // .wait(`.pager_container .pager_not_current`)
+                    .wait(() => $(`.pager_container .pager_not_current`).length > 0)
+                    .wait(() => {
+                        const len = +$(`.pager_container .pager_not_current:last`).html()
+                        
+                        window.array = []
+
+                        if($('.item_con_list .con_list_item')[0].attr(`data-positionid`) === array[0]) {
+                            return false
+                        }
+
+                        $('.item_con_list .con_list_item').each((i, l) => {
+                            array = [$(l).attr(`data-positionid`), ...array]
+                        })
+
+                        return true
+                    })
+                    .evaluate(() => {
+                        // const img = $(`.container #captcha`).prop(`src`)
+                        // console.log(img)
+
+                        // let array = []
+                        // const len = +$(`.pager_container .pager_not_current:last`).html()
+
+                        // for(let i = 0; i < 2; i++) {
+                        //     if(i!== 0) {
+                        //         $(`.pager_next`).click()
+                        //     }
+
+                        //     $('.item_con_list .con_list_item').each((i, l) => {
+                        //         array = [$(l).attr(`data-positionid`), ...array]
+                        //     })
+                        // }
+
+                        // array = Array.from(new Set(array))
+                        // array = array.map(positionId => {
+                        //     return { positionId }
+                        // })
+                        
+                        console.log(array)
+                        // return array
+                    })
+                    .then(data => {
+                        // resolve([null, null, data])
+                    }).catch(err => {
+                        console.log(err)
+                    })
+            }
+        })
     })
 }
 
@@ -98,9 +150,20 @@ const fetchUrl = (url, callback) => {
                 console.log(err)
             }
 
-            const param = getInfos(url, res)
+            if(res.text.indexOf('安全访问验证') <= -1) {
+                const param = getInfos(url, res)
 
-            callback(null, param)
+                callback(null, param)
+            } else {
+                nightmare.goto(url)
+                    .evaluate(() => {
+                        return $(`body`).html()
+                    })
+                    .then(data => { 
+                        const param = getInfos(url, data)
+                        callback(null, param)
+                    })     
+            }
         })
 }
 
@@ -110,6 +173,7 @@ const getMapLimit = (arrs, num, res) => {
     async.mapLimit(urls, num, (url, callback) => {
         fetchUrl(url, callback)
     }, (err, results) => {
+        console.log(results)
         res.send(results) 
     })
 }
@@ -138,7 +202,9 @@ function getList(arr) {
 }
 
 const getInfos = (url, res) => {
-    let $ = cheerio.load(res.text, { decodeEntities: false })
+    const texts = res.text || res
+    const $ = cheerio.load(texts, { decodeEntities: false })
+    
     let jobRequirement = ``
     let jobDetail = ``
 
@@ -207,7 +273,7 @@ const getInfo = (positionId, res) => {
         job: {
             jobName,
             jobDetail,
-            jobRequirement,
+            jobRequirement
         },
         detail: {
             releaseTime,
@@ -230,16 +296,23 @@ app.get(`/`, (req, res, next) => {
     (async () => {
         let pn = 1
  
-        const num = 2 
-        const [data, sres] = await getCookie(url_start)
-        const cookie = sres.headers[`set-cookie`]
-        const list = await getPositionList(url_parse, cookie, post, pn)
-        const dataArray = JSON.parse(list).content ? JSON.parse(list).content.positionResult.result : []
-        // const promises = getList(dataArray)
+        const num = 1
+        const [data, sres, dataArray] = await getCookie(url_start)
 
-        // Promise.all(promises).then(datas => {
-        //     res.send(datas)
-        // })
+        if(!dataArray) {
+            const cookie = sres.headers[`set-cookie`]
+            const list = await getPositionList(url_parse, cookie, post, pn)
+            const dataArray = JSON.parse(list).content ? JSON.parse(list).content.positionResult.result : []
+            // const promises = getList(dataArray)
+    
+            // Promise.all(promises).then(datas => {
+            //     res.send(datas)
+            // })
+
+            getMapLimit(dataArray, num, res)
+
+            return 
+        }
 
         getMapLimit(dataArray, num, res)
         //TODO: 判断是否操作太过频繁
