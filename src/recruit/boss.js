@@ -58,36 +58,37 @@ const crawlerDetailFn = (url, maxConnections, resolve, reject) => {
 }
 
 const crawlerListFn = (post, city, page, maxConnections, res) => {
-    const c = new Crawler({
-        maxConnections,
-        callback: (err, cres, done) => {
-            if(err) {
-                console.log(err)
-            } else {
-                const $ = cres.$
-                const list = $(`.job-list li`)
-
-                let listArr = []
-
-                list.each((i, l) => {
-                    listArr = [$(l).find(`.info-primary a`).attr(`href`), ...listArr]
-                })
-
-                const promises = listArr.map(url => {
-                    return new Promise((reslove, reject) => crawlerDetailFn(url, maxConnections, reslove, reject))
-                })
-
-                Promise.all(promises).then(datas => {
-                    console.log(datas)
-                    res.send(datas)
-                })
+    return new Promise((fresolve, freject) => {
+        const c = new Crawler({
+            maxConnections,
+            callback: (err, cres, done) => {
+                if(err) {
+                    console.log(err)
+                } else {
+                    const $ = cres.$
+                    const list = $(`.job-list li`)
+    
+                    let listArr = []
+    
+                    list.each((i, l) => {
+                        listArr = [$(l).find(`.info-primary a`).attr(`href`), ...listArr]
+                    })
+    
+                    const promises = listArr.map(url => {
+                        return new Promise((reslove, reject) => crawlerDetailFn(url, maxConnections, reslove, reject))
+                    })
+    
+                    Promise.all(promises).then(datas => {
+                        fresolve(datas)
+                    })
+                }
+    
+                done()
             }
-
-            done()
-        }
+        })
+    
+        c.queue(`https://www.zhipin.com/${city.code}/?query=${post}&page=${page}&ka=page-${page}`)
     })
-
-    c.queue(`https://www.zhipin.com/${city.code}/?query=${post}&page=${page}&ka=page-${page}`)
 }
 
 app.get(`/`, (req, res, next) => {
@@ -99,7 +100,9 @@ app.get(`/`, (req, res, next) => {
 
     const result = crawlerListFn(post, city, page, num, res)
 
-    // res.send(result)
+    result.then(data => {
+        res.send(data)
+    })
 })
 
 app.listen(3007, () => {
