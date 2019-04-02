@@ -5,8 +5,9 @@ const { cities } = require(`../constants/cities`)
 
 const app = express()
 
-const crawlerDetailFn = (url, maxConnections, resolve, reject) => {
+const crawlerDetailFn = (url, maxConnections, rateLimit, resolve, reject) => {
     const c = new Crawler({
+        rateLimit,
         maxConnections,
         callback: (err, cres, done) => {
             if(err) {
@@ -41,10 +42,10 @@ const crawlerDetailFn = (url, maxConnections, resolve, reject) => {
                     },
                     detail: {
                         releaseTime, 
-                        companyName,
+                        companyName, 
                         typeOfBusiness, 
-                        numberOfPeople,
-                        address
+                        numberOfPeople, 
+                        address 
                     },
                     url: `https://www.zhipin.com${url}`
                 }
@@ -57,7 +58,7 @@ const crawlerDetailFn = (url, maxConnections, resolve, reject) => {
     c.queue(`https://www.zhipin.com${url}`)
 }
 
-const crawlerListFn = (post, city, page, maxConnections, res) => {
+const crawlerListFn = (listArr, post, city, page, maxConnections, rateLimit) => {
     return new Promise((fresolve, freject) => {
         const c = new Crawler({
             maxConnections,
@@ -67,22 +68,23 @@ const crawlerListFn = (post, city, page, maxConnections, res) => {
                 } else {
                     const $ = cres.$
                     const list = $(`.job-list li`)
-    
-                    let listArr = []
-    
+     
+                    if(list.length <= 0) {
+                        freject(`----- 爬取结束 -----`)
+                    }
+
                     list.each((i, l) => {
                         listArr = [$(l).find(`.info-primary a`).attr(`href`), ...listArr]
                     })
-    
-                    const promises = listArr.map(url => {
-                        return new Promise((reslove, reject) => crawlerDetailFn(url, maxConnections, reslove, reject))
-                    })
-    
+
+                    //TODO: 先将所有listArr存起来
+                    const promises = listArr.map(url => new Promise((reslove, reject) => crawlerDetailFn(url, maxConnections, rateLimit, reslove, reject)))
+
                     Promise.all(promises).then(datas => {
                         fresolve(datas)
                     })
                 }
-    
+
                 done()
             }
         })
@@ -95,13 +97,17 @@ app.get(`/`, (req, res, next) => {
     const post = `react`
     const city = cities[0]
     const num = 5
+    const rateLimit = 2000
 
     let page = 1
-
-    const result = crawlerListFn(post, city, page, num, res)
-
+    let listArr = []
+ 
+    const result = crawlerListFn(listArr, post, city, page, num, rateLimit)
+    
     result.then(data => {
         res.send(data)
+    }).catch(err => {
+        console.log(err)
     })
 })
 

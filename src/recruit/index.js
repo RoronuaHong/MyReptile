@@ -80,10 +80,10 @@ async function getCookie(url) {
                         const len = +$(`.pager_container .pager_not_current:last`).html()
                         
                         window.array = []
-
-                        if($('.item_con_list .con_list_item')[0].attr(`data-positionid`) === array[0]) {
-                            return false
-                        }
+                        // console.log($('.item_con_list .con_list_item')[0])
+                        // if($('.item_con_list .con_list_item')[0].attr(`data-positionid`) === array[0]) {
+                        //     return false
+                        // }
 
                         $('.item_con_list .con_list_item').each((i, l) => {
                             array = [$(l).attr(`data-positionid`), ...array]
