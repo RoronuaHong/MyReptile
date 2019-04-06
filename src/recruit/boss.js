@@ -1,13 +1,11 @@
 const express = require(`express`)
 const Crawler = require(`crawler`)
-const mongoose = require(`mongoose`)
 
+const { urlMethods } = require(`../mongodb/boss/methods`)
 const { cities } = require(`../constants/cities`)
 const { utils } = require(`../utils/utils`)
-const { user } = require('../mongodb/boss/user')
 
 const app = express()
-mongoose.connect('mongodb://localhost/boss')
 
 const crawlerDetailFn = (url, maxConnections, rateLimit, resolve, reject) => {
     const c = new Crawler({
@@ -39,7 +37,6 @@ const crawlerDetailFn = (url, maxConnections, rateLimit, resolve, reject) => {
                 jobDetail = jobDetail.substring(0, jobDetail.length - 1)
 
                 const param = {
-                    id: (`${url}`).split('.')[0].substr(1),
                     job: {
                         jobName,
                         jobRequirement,
@@ -70,6 +67,7 @@ const crawlerListFn = (listArr, post, city, pages, maxConnections, rateLimit) =>
     return pages.map(page => {
         return new Promise((fresolve, freject) => {
             const c = new Crawler({
+                rateLimit,
                 maxConnections, 
                 callback: (err, cres, done) => {
                     if(err) { 
@@ -79,9 +77,8 @@ const crawlerListFn = (listArr, post, city, pages, maxConnections, rateLimit) =>
                         const list = $(`.job-list li`)
 
                         if(list.length <= 0) {
-                            // freject(`----- 爬取结束 -----`)
                             fresolve([])
-                            console.log(`----- 爬取结束 -----`)
+                            console.log(`----- 当前页无数据 -----`)
                             done()
 
                             return
@@ -115,21 +112,28 @@ app.get(`/`, (req, res, next) => {
     let pages = []
     let listArr = []
  
-    for(let i = 1; i <= 1; i ++) {
+    for(let i = 1; i <= 10; i ++) {
         pages = [...pages, i]
     }
 
     const result = crawlerListFn(listArr, post, city, pages, num, rateLimit)
-
+ 
     Promise.all(result).then(data => {
         const list = utils.arrayDimensionReduction(data)
         const lists = Array.from(new Set(list))
-        const promises = lists.map(url => new Promise((reslove, reject) => crawlerDetailFn(url, num, rateLimit, reslove, reject)))
- 
+
+        const promises = lists.map(item => {
+            const url = item && item.split('.')[0].split('/')[2]
+
+            urlMethods.updateUrl(url)
+
+            return new Promise((reslove, reject) => crawlerDetailFn(item, num, rateLimit, reslove, reject))
+        })
+   
         return Promise.all(promises)
     }).then(data => {
+        urlMethods.
         res.send(data)
-        console.log(user)
     }).catch(err => {
         console.log(err)
     })
