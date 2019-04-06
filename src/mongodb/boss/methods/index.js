@@ -1,4 +1,4 @@
-const { Url } = require('../url')
+const { Url, Job } = require('../url')
 
 const urlMethods = {
     findUrl: url => {
@@ -12,10 +12,21 @@ const urlMethods = {
         Url.updateMany(
             { url },
             { $set: { url, updateTime: String(+new Date()) } },
-            { upsert: true },
+            { upsert: true, multi: true },
             (err, doc) => err && console.log('Error:' + err)
         )
     }
 }
 
-module.exports = { urlMethods }
+const jobMethods = {
+    updateJob: ({ job, detail, url }) => {
+        Job.updateMany(
+            { url },
+            { $set: { job, detail, url } },
+            { upsert: true, multi: true },
+            (err, doc) => err && console.log('Error:' + err)
+        )
+    }
+}
+
+module.exports = { urlMethods, jobMethods }

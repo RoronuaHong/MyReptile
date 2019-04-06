@@ -1,7 +1,7 @@
 const express = require(`express`)
 const Crawler = require(`crawler`)
 
-const { urlMethods } = require(`../mongodb/boss/methods`)
+const { urlMethods, jobMethods } = require(`../mongodb/boss/methods`)
 const { cities } = require(`../constants/cities`)
 const { utils } = require(`../utils/utils`)
 
@@ -104,7 +104,7 @@ const crawlerListFn = (listArr, post, city, pages, maxConnections, rateLimit) =>
 }
 
 app.get(`/`, (req, res, next) => {
-    const post = `react`
+    const post = encodeURIComponent(`前端`)
     const city = cities[0]
     const num = 10
     const rateLimit = 1000
@@ -112,7 +112,7 @@ app.get(`/`, (req, res, next) => {
     let pages = []
     let listArr = []
  
-    for(let i = 1; i <= 10; i ++) {
+    for(let i = 1; i <= 20; i ++) {
         pages = [...pages, i]
     }
 
@@ -129,10 +129,20 @@ app.get(`/`, (req, res, next) => {
 
             return new Promise((reslove, reject) => crawlerDetailFn(item, num, rateLimit, reslove, reject))
         })
-   
+
         return Promise.all(promises)
     }).then(data => {
-        urlMethods.
+        for(let item of data) {
+            const url = item.url && item.url.split('.')[2].split('/')[2]
+            const result = urlMethods.findUrl(url)
+
+            result.then(data => {
+                if(data.length > 0) {
+                    jobMethods.updateJob(item)
+                }
+            })
+        }
+
         res.send(data)
     }).catch(err => {
         console.log(err)
