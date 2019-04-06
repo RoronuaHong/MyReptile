@@ -1,6 +1,6 @@
 import { PureComponent } from 'react'
 import { Input } from 'antd'
-import { Col } from 'antd'
+import { Row, Col } from 'antd'
 
 const Search = Input.Search
 
@@ -10,13 +10,15 @@ export default class Container extends PureComponent {
 
         return (
             <div className='search-box'>
-                <Col span={19}></Col>
-                <Col span={4}>
-                    <Search enterButton
-                        placeholder='请输入关键字'
-                        onSearch={value => console.log(value)} />
-                </Col>
-                <Col span={1}></Col>
+                <Row>
+                    <Col span={19}></Col>
+                    <Col span={4}>
+                        <Search enterButton
+                            placeholder='请输入关键字'
+                            onSearch={value => console.log(value)} />
+                    </Col>
+                    <Col span={1}></Col>
+                </Row>
             </div>
         )
     }

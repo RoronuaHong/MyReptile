@@ -1,11 +1,12 @@
 import { Fragment, PureComponent } from 'react'
-import { Row } from 'antd'
 import Head from './head'
 import Containers from '../containers'
 import Nav from '../containers/nav'
+import List from '../containers/list'
 import Search from '../containers/search'
 
-import '../less/index.less'
+import '../less/base.less'
+import '../less/public/common.less'
 
 class Home extends PureComponent {
     render() {
@@ -13,11 +14,9 @@ class Home extends PureComponent {
             <Fragment>
                 <Head />
                 <Containers>
-                    <Row>
-                        <Nav />
-                        <Search />
-                        
-                    </Row>
+                    <Nav />
+                    <Search />
+                    <List />
                 </Containers>
             </Fragment>
         )
