@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 
 const Nav = () => (
-    <div></div>
+    <div className='nav-box'>col-24</div>
 )
 
 export default Nav
