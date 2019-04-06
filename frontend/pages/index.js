@@ -1,5 +1,5 @@
 import { Fragment, PureComponent } from 'react'
-import { Row, Col } from 'antd'
+import { Row } from 'antd'
 import Head from './head'
 import Containers from '../containers'
 import Nav from '../containers/nav'
@@ -15,6 +15,8 @@ class Home extends PureComponent {
                 <Containers>
                     <Row>
                         <Nav />
+                        <Search />
+                        
                     </Row>
                 </Containers>
             </Fragment>
