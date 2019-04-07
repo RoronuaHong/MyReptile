@@ -6,8 +6,6 @@ const Search = Input.Search
 
 export default class Container extends PureComponent {
     render() {
-        const { children } = this.props
-
         return (
             <div className='search-box'>
                 <Row>

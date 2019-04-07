@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "recruit": "node-dev  src/recruit/index.js",
-    "boss": "node-dev  src/recruit/boss.js",
+    "recruit": "node-dev src/recruit/index.js",
+    "boss": "node-dev src/recruit/boss.js",
     "start": "node src/index.js",
     "dev": "node-dev src/index.js",
     "job": "node-dev backend/boss.js"
@@ -29,9 +29,11 @@
     "async": "^2.6.2",
     "baidu-aip-sdk": "^2.3.9",
     "cheerio": "^1.0.0-rc.2",
+    "cors": "^2.8.5",
     "crawler": "^1.2.0",
     "fs": "^0.0.1-security",
     "http": "^0.0.0",
+    "http-proxy": "^1.17.0",
     "https": "^1.0.0",
     "less": "^3.9.0",
     "mongoose": "^5.4.22",
