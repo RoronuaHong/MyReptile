@@ -36,6 +36,6 @@ const rowList = [{
     match: 'url'
 }]
 
-const color = ['#aaa', '#999', '#888', '#777', '#666', '#555', '#444', '#333']
+const color = ['#aaa', '#999', '#888', '#777', '#666', '#555', '#444', '#333', '#222']
 
 export { rowList, color }

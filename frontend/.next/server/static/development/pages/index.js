@@ -1069,17 +1069,6 @@ module.exports = require("core-js/library/fn/object/define-property");
 
 /***/ }),
 
-/***/ "core-js/library/fn/object/entries":
-/*!****************************************************!*\
-  !*** external "core-js/library/fn/object/entries" ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("core-js/library/fn/object/entries");
-
-/***/ }),
-
 /***/ "core-js/library/fn/object/get-own-property-descriptor":
 /*!************************************************************************!*\
   !*** external "core-js/library/fn/object/get-own-property-descriptor" ***!

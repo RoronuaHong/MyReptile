@@ -6265,7 +6265,7 @@ a.ant-btn-sm {
 }
 .container .list-box .list-detail li {
   min-height: 40px;
-  line-height: 40px;
+  line-height: 20px;
   margin-bottom: 20px;
 }
 .container .list-box .list-detail .name {

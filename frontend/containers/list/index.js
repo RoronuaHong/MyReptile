@@ -6,28 +6,52 @@ import { getList } from '../../api/boss'
 const { Content } = Layout
 
 const renderList = list => list.map((item, i) => {
-    let rowLists
+    const rowLists = rowList.map(m => {
+        switch(m.match) {
+            case 'url':
+                m.detail = item.url
+                break
+            case 'releaseTime': 
+                m.detail = item.detail.releaseTime
+                break
+            case 'companyName': 
+                m.detail = item.detail.companyName
+                break
+            case 'typeOfBusiness': 
+                m.detail = item.detail.typeOfBusiness
+                break
+            case 'numberOfPeople': 
+                m.detail = item.detail.numberOfPeople
+                break
+            case 'address': 
+                m.detail = item.detail.address
+                break
+            case 'jobName': 
+                m.detail = item.job.jobName
+                break
+            case 'jobRequirement': 
+                m.detail = item.job.jobRequirement
+                break
+            case 'jobDetail': 
+                m.detail = item.job.jobDetail
+                break
+        }
 
-    Object.entries(item).map((l, j) => {
-        rowLists = rowList.map((m, k) => {
-            
-        })
+        return m
     })
 
-    // console.log(rowLists)
+    const renderRowList = rowLists.map(l => (
+        l.id !== 100 && <Row type='flex' key={l.id}>
+            <Col span={3} className='name'>
+                {l.name} :
+            </Col>
+            <Col span={21} className='detail' style={{ background: color[l.id] }}>
+                {l.detail}
+            </Col>
+        </Row>
+    ))
 
-    return (
-        <li>
-            {/* <Row key={l.id}>
-                <Col span={3} className='name'>
-                    {l.name} :
-                </Col>
-                <Col span={21} className='detail' style={{background: color[i]}}>
-                    阿水淀粉撒掉
-                </Col>
-            </Row> */}
-        </li>
-    )
+    return <li key={item.url}>{renderRowList}</li>
 })
 
 export default class List extends PureComponent {
@@ -43,15 +67,13 @@ export default class List extends PureComponent {
 
     render() {
         const { list } = this.state
-
-        console.log(list)
-        // const renderLists = renderList(list)
+        const renderLists = renderList(list)
 
         return (
             <Content>
                 <div className='list-box'>
                     <ul className='list-detail'>
-                        {/* {renderLists} */}
+                        {renderLists}
                     </ul>
                 </div>
             </Content>

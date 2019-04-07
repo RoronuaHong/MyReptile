@@ -39,14 +39,6 @@
       "publicPath": "static/chunks/1.js"
     }
   ],
-  "../../modules/es7.object.entries": [
-    {
-      "id": "./node_modules/_core-js@2.6.5@core-js/library/modules/es7.object.entries.js",
-      "name": "./node_modules/_core-js@2.6.5@core-js/library/modules/es7.object.entries.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    }
-  ],
   "../_util/isNumeric": [
     {
       "id": "./node_modules/_antd@3.16.1@antd/lib/_util/isNumeric.js",
@@ -155,14 +147,6 @@
     {
       "id": "./node_modules/_antd@3.16.1@antd/lib/layout/Sider.js",
       "name": "./node_modules/_antd@3.16.1@antd/lib/layout/Sider.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    }
-  ],
-  "./_object-to-array": [
-    {
-      "id": "./node_modules/_core-js@2.6.5@core-js/library/modules/_object-to-array.js",
-      "name": "./node_modules/_core-js@2.6.5@core-js/library/modules/_object-to-array.js",
       "file": "static/chunks/1.js",
       "publicPath": "static/chunks/1.js"
     }
@@ -327,14 +311,6 @@
       "publicPath": "static/chunks/1.js"
     }
   ],
-  "@babel/runtime-corejs2/core-js/object/entries": [
-    {
-      "id": "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/core-js/object/entries.js",
-      "name": "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/core-js/object/entries.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    }
-  ],
   "@babel/runtime-corejs2/helpers/esm/asyncToGenerator": [
     {
       "id": "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/helpers/esm/asyncToGenerator.js",
@@ -387,14 +363,6 @@
     {
       "id": "./node_modules/_axios@0.18.0@axios/index.js",
       "name": "./node_modules/_axios@0.18.0@axios/index.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    }
-  ],
-  "core-js/library/fn/object/entries": [
-    {
-      "id": "./node_modules/_core-js@2.6.5@core-js/library/fn/object/entries.js",
-      "name": "./node_modules/_core-js@2.6.5@core-js/library/fn/object/entries.js",
       "file": "static/chunks/1.js",
       "publicPath": "static/chunks/1.js"
     }

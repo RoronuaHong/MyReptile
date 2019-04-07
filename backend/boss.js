@@ -6,6 +6,8 @@ const { jobMethods } = require(`../mongodb/boss/methods`)
 const app = express()
 
 app.use(cors())
+app.use(cors())
+app.use(cors())
 
 app.get('/boss/list', (req, res, next) => {
     const result = jobMethods.findAlljob()

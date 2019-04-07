@@ -71,7 +71,7 @@ var rowList = [{
   name: '公司网址',
   match: 'url'
 }];
-var color = ['#aaa', '#999', '#888', '#777', '#666', '#555', '#444', '#333'];
+var color = ['#aaa', '#999', '#888', '#777', '#666', '#555', '#444', '#333', '#222'];
 
 
 /***/ }),
@@ -96,16 +96,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/helpers/esm/inherits.js");
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_entries__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/entries */ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/core-js/object/entries.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_entries__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_entries__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! antd/lib/layout/style */ "antd/lib/layout/style");
-/* harmony import */ var antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var antd_lib_layout__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! antd/lib/layout */ "antd/lib/layout");
-/* harmony import */ var antd_lib_layout__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(antd_lib_layout__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _constants_list__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../constants/list */ "./constants/list.js");
-/* harmony import */ var _api_boss__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../api/boss */ "./api/boss.js");
+/* harmony import */ var antd_lib_row_style__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! antd/lib/row/style */ "antd/lib/row/style");
+/* harmony import */ var antd_lib_row_style__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(antd_lib_row_style__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var antd_lib_row__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! antd/lib/row */ "antd/lib/row");
+/* harmony import */ var antd_lib_row__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(antd_lib_row__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var antd_lib_col_style__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! antd/lib/col/style */ "antd/lib/col/style");
+/* harmony import */ var antd_lib_col_style__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(antd_lib_col_style__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var antd_lib_col__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! antd/lib/col */ "antd/lib/col");
+/* harmony import */ var antd_lib_col__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(antd_lib_col__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! antd/lib/layout/style */ "antd/lib/layout/style");
+/* harmony import */ var antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var antd_lib_layout__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! antd/lib/layout */ "antd/lib/layout");
+/* harmony import */ var antd_lib_layout__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(antd_lib_layout__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _constants_list__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../constants/list */ "./constants/list.js");
+/* harmony import */ var _api_boss__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../api/boss */ "./api/boss.js");
+
+
+
 
 
 
@@ -123,24 +132,89 @@ var _jsxFileName = "/Users/slimhong/Desktop/hobbies/reptile/MyReptile/frontend/c
 
 
 
-var Content = antd_lib_layout__WEBPACK_IMPORTED_MODULE_11___default.a.Content;
+var Content = antd_lib_layout__WEBPACK_IMPORTED_MODULE_14___default.a.Content;
 
 var renderList = function renderList(list) {
   return list.map(function (item, i) {
-    var rowLists;
+    var rowLists = _constants_list__WEBPACK_IMPORTED_MODULE_16__["rowList"].map(function (m) {
+      switch (m.match) {
+        case 'url':
+          m.detail = item.url;
+          break;
 
-    _babel_runtime_corejs2_core_js_object_entries__WEBPACK_IMPORTED_MODULE_9___default()(item).map(function (l, j) {
-      rowLists = _constants_list__WEBPACK_IMPORTED_MODULE_13__["rowList"].map(function (m, k) {});
-    }); // console.log(rowLists)
+        case 'releaseTime':
+          m.detail = item.detail.releaseTime;
+          break;
 
+        case 'companyName':
+          m.detail = item.detail.companyName;
+          break;
 
-    return react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("li", {
+        case 'typeOfBusiness':
+          m.detail = item.detail.typeOfBusiness;
+          break;
+
+        case 'numberOfPeople':
+          m.detail = item.detail.numberOfPeople;
+          break;
+
+        case 'address':
+          m.detail = item.detail.address;
+          break;
+
+        case 'jobName':
+          m.detail = item.job.jobName;
+          break;
+
+        case 'jobRequirement':
+          m.detail = item.job.jobRequirement;
+          break;
+
+        case 'jobDetail':
+          m.detail = item.job.jobDetail;
+          break;
+      }
+
+      return m;
+    });
+    var renderRowList = rowLists.map(function (l) {
+      return l.id !== 100 && react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement(antd_lib_row__WEBPACK_IMPORTED_MODULE_10___default.a, {
+        type: "flex",
+        key: l.id,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 44
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement(antd_lib_col__WEBPACK_IMPORTED_MODULE_12___default.a, {
+        span: 3,
+        className: "name",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 45
+        },
+        __self: this
+      }, l.name, " :"), react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement(antd_lib_col__WEBPACK_IMPORTED_MODULE_12___default.a, {
+        span: 21,
+        className: "detail",
+        style: {
+          background: _constants_list__WEBPACK_IMPORTED_MODULE_16__["color"][l.id]
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 48
+        },
+        __self: this
+      }, l.detail));
+    });
+    return react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement("li", {
+      key: item.url,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 20
+        lineNumber: 54
       },
       __self: this
-    });
+    }, renderRowList);
   });
 };
 
@@ -181,7 +255,7 @@ function (_PureComponent) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return Object(_api_boss__WEBPACK_IMPORTED_MODULE_14__["getList"])();
+                return Object(_api_boss__WEBPACK_IMPORTED_MODULE_17__["getList"])();
 
               case 2:
                 option = _context.sent;
@@ -207,47 +281,35 @@ function (_PureComponent) {
     key: "render",
     value: function render() {
       var list = this.state.list;
-      console.log(list); // const renderLists = renderList(list)
-
-      return react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement(Content, {
+      var renderLists = renderList(list);
+      return react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement(Content, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 51
+          lineNumber: 73
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement("div", {
         className: "list-box",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 52
+          lineNumber: 74
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("ul", {
+      }, react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement("ul", {
         className: "list-detail",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 53
+          lineNumber: 75
         },
         __self: this
-      })));
+      }, renderLists)));
     }
   }]);
 
   return List;
-}(react__WEBPACK_IMPORTED_MODULE_12__["PureComponent"]);
+}(react__WEBPACK_IMPORTED_MODULE_15__["PureComponent"]);
 
 
-
-/***/ }),
-
-/***/ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/core-js/object/entries.js":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/core-js/object/entries.js ***!
-  \*****************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! core-js/library/fn/object/entries */ "core-js/library/fn/object/entries");
 
 /***/ }),
 
