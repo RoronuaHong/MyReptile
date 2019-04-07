@@ -2130,7 +2130,7 @@ function (_PureComponent) {
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_11___default.a.createElement(antd_lib_col__WEBPACK_IMPORTED_MODULE_3___default.a, {
-        span: 19,
+        span: 18,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 14
@@ -2145,7 +2145,7 @@ function (_PureComponent) {
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_11___default.a.createElement(Search, {
         enterButton: true,
-        placeholder: "\u8BF7\u8F93\u5165\u5173\u952E\u5B57",
+        placeholder: "\u8BF7\u8F93\u5165\u7B5B\u9009\u8BCD",
         onSearch: function onSearch(value) {
           return console.log(value);
         },
@@ -2155,7 +2155,7 @@ function (_PureComponent) {
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_11___default.a.createElement(antd_lib_col__WEBPACK_IMPORTED_MODULE_3___default.a, {
-        span: 1,
+        span: 2,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 20

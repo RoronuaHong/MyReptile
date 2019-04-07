@@ -1,7 +1,7 @@
 const express = require(`express`)
 const Crawler = require(`crawler`)
 
-const { urlMethods, jobMethods } = require(`../mongodb/boss/methods`)
+const { urlMethods, jobMethods } = require(`../../mongodb/boss/methods`)
 const { cities } = require(`../constants/cities`)
 const { utils } = require(`../utils/utils`)
 

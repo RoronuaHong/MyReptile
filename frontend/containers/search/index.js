@@ -11,13 +11,13 @@ export default class Container extends PureComponent {
         return (
             <div className='search-box'>
                 <Row>
-                    <Col span={19}></Col>
+                    <Col span={18}></Col>
                     <Col span={4}>
                         <Search enterButton
-                            placeholder='请输入关键字'
+                            placeholder='请输入筛选词'
                             onSearch={value => console.log(value)} />
                     </Col>
-                    <Col span={1}></Col>
+                    <Col span={2}></Col>
                 </Row>
             </div>
         )
