@@ -1220,7 +1220,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   makeHighLight: function makeHighLight(content, keywords) {
-    var contents = content.replace(keywords, "<span class='high-light-span'>".concat(keywords, "</span>"));
+    var reg = new RegExp(keywords, 'ig');
+    var contents = content.replace(reg, function () {
+      return "<span class='high-light-span'>".concat(arguments.length <= 0 ? undefined : arguments[0], "</span>");
+    });
     return {
       __html: contents
     };

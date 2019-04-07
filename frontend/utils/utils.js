@@ -3,7 +3,11 @@ export default {
         return { __html: content }
     },
     makeHighLight: (content, keywords) => {
-        const contents = content.replace(keywords, `<span class='high-light-span'>${keywords}</span>`)
+        const reg = new RegExp(keywords, 'ig')
+        
+        const contents = content.replace(reg, (...res) => (
+            `<span class='high-light-span'>${res[0]}</span>`
+        ))
 
         return { __html: contents }
     }
