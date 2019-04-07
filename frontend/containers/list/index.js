@@ -1,23 +1,31 @@
 import { PureComponent } from 'react'
-import { color } from '../../constants/list'
+import { rowList, color } from '../../constants/list'
 import { Row, Col, Layout } from 'antd'
 import { getList } from '../../api/boss'
 
 const { Content } = Layout
 
-const renderList = list => list.map((l, i) => {
+const renderList = list => list.map((item, i) => {
+    let rowLists
 
+    Object.entries(item).map((l, j) => {
+        rowLists = rowList.map((m, k) => {
+            
+        })
+    })
+
+    // console.log(rowLists)
 
     return (
         <li>
-            <Row key={l.id}>
+            {/* <Row key={l.id}>
                 <Col span={3} className='name'>
                     {l.name} :
                 </Col>
                 <Col span={21} className='detail' style={{background: color[i]}}>
                     阿水淀粉撒掉
                 </Col>
-            </Row>
+            </Row> */}
         </li>
     )
 })
@@ -35,7 +43,7 @@ export default class List extends PureComponent {
 
     render() {
         const { list } = this.state
-    
+
         console.log(list)
         // const renderLists = renderList(list)
 

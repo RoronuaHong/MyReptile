@@ -27,37 +27,49 @@ var getList = function getList() {
 /*!***************************!*\
   !*** ./constants/list.js ***!
   \***************************/
-/*! exports provided: list, color */
+/*! exports provided: rowList, color */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "list", function() { return list; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rowList", function() { return rowList; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
-var list = [{
+var rowList = [{
   id: 0,
-  name: '职位名称'
+  name: '职位名称',
+  match: 'jobName'
 }, {
   id: 1,
-  name: '职位信息'
+  name: '职位信息',
+  match: 'jobDetail'
 }, {
   id: 2,
-  name: '发布时间'
+  name: '发布时间',
+  match: 'releaseTime'
 }, {
   id: 3,
-  name: '公司名称'
+  name: '公司名称',
+  match: 'companyName'
 }, {
   id: 4,
-  name: '公司类型'
+  name: '公司类型',
+  match: 'typeOfBusiness'
 }, {
   id: 5,
-  name: '公司人数'
+  name: '公司人数',
+  match: 'numberOfPeople'
 }, {
   id: 6,
-  name: '公司地址'
+  name: '公司地址',
+  match: 'address'
 }, {
   id: 7,
-  name: '职位详情'
+  name: '职位详情',
+  match: 'jobRequirement'
+}, {
+  id: 100,
+  name: '公司网址',
+  match: 'url'
 }];
 var color = ['#aaa', '#999', '#888', '#777', '#666', '#555', '#444', '#333'];
 
@@ -84,25 +96,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/helpers/esm/inherits.js");
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var antd_lib_row_style__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! antd/lib/row/style */ "antd/lib/row/style");
-/* harmony import */ var antd_lib_row_style__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(antd_lib_row_style__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var antd_lib_row__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! antd/lib/row */ "antd/lib/row");
-/* harmony import */ var antd_lib_row__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(antd_lib_row__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var antd_lib_col_style__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! antd/lib/col/style */ "antd/lib/col/style");
-/* harmony import */ var antd_lib_col_style__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(antd_lib_col_style__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var antd_lib_col__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! antd/lib/col */ "antd/lib/col");
-/* harmony import */ var antd_lib_col__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(antd_lib_col__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! antd/lib/layout/style */ "antd/lib/layout/style");
-/* harmony import */ var antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var antd_lib_layout__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! antd/lib/layout */ "antd/lib/layout");
-/* harmony import */ var antd_lib_layout__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(antd_lib_layout__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _constants_list__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../constants/list */ "./constants/list.js");
-/* harmony import */ var _api_boss__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../api/boss */ "./api/boss.js");
-
-
-
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_entries__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/entries */ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/core-js/object/entries.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_entries__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_entries__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! antd/lib/layout/style */ "antd/lib/layout/style");
+/* harmony import */ var antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(antd_lib_layout_style__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var antd_lib_layout__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! antd/lib/layout */ "antd/lib/layout");
+/* harmony import */ var antd_lib_layout__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(antd_lib_layout__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _constants_list__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../constants/list */ "./constants/list.js");
+/* harmony import */ var _api_boss__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../api/boss */ "./api/boss.js");
 
 
 
@@ -120,43 +123,24 @@ var _jsxFileName = "/Users/slimhong/Desktop/hobbies/reptile/MyReptile/frontend/c
 
 
 
-var Content = antd_lib_layout__WEBPACK_IMPORTED_MODULE_14___default.a.Content;
+var Content = antd_lib_layout__WEBPACK_IMPORTED_MODULE_11___default.a.Content;
 
 var renderList = function renderList(list) {
-  return list.map(function (l, i) {
-    return react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement("li", {
+  return list.map(function (item, i) {
+    var rowLists;
+
+    _babel_runtime_corejs2_core_js_object_entries__WEBPACK_IMPORTED_MODULE_9___default()(item).map(function (l, j) {
+      rowLists = _constants_list__WEBPACK_IMPORTED_MODULE_13__["rowList"].map(function (m, k) {});
+    }); // console.log(rowLists)
+
+
+    return react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("li", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 12
+        lineNumber: 20
       },
       __self: this
-    }, react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement(antd_lib_row__WEBPACK_IMPORTED_MODULE_10___default.a, {
-      key: l.id,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 13
-      },
-      __self: this
-    }, react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement(antd_lib_col__WEBPACK_IMPORTED_MODULE_12___default.a, {
-      span: 3,
-      className: "name",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 14
-      },
-      __self: this
-    }, l.name, " :"), react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement(antd_lib_col__WEBPACK_IMPORTED_MODULE_12___default.a, {
-      span: 21,
-      className: "detail",
-      style: {
-        background: _constants_list__WEBPACK_IMPORTED_MODULE_16__["color"][i]
-      },
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 17
-      },
-      __self: this
-    }, "\u963F\u6C34\u6DC0\u7C89\u6492\u6389")));
+    });
   });
 };
 
@@ -197,7 +181,7 @@ function (_PureComponent) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return Object(_api_boss__WEBPACK_IMPORTED_MODULE_17__["getList"])();
+                return Object(_api_boss__WEBPACK_IMPORTED_MODULE_14__["getList"])();
 
               case 2:
                 option = _context.sent;
@@ -225,24 +209,24 @@ function (_PureComponent) {
       var list = this.state.list;
       console.log(list); // const renderLists = renderList(list)
 
-      return react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement(Content, {
+      return react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement(Content, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 43
+          lineNumber: 51
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
         className: "list-box",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 44
+          lineNumber: 52
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement("ul", {
+      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("ul", {
         className: "list-detail",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 45
+          lineNumber: 53
         },
         __self: this
       })));
@@ -250,9 +234,20 @@ function (_PureComponent) {
   }]);
 
   return List;
-}(react__WEBPACK_IMPORTED_MODULE_15__["PureComponent"]);
+}(react__WEBPACK_IMPORTED_MODULE_12__["PureComponent"]);
 
 
+
+/***/ }),
+
+/***/ "./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/core-js/object/entries.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/_@babel_runtime-corejs2@7.1.2@@babel/runtime-corejs2/core-js/object/entries.js ***!
+  \*****************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/object/entries */ "core-js/library/fn/object/entries");
 
 /***/ }),
 
