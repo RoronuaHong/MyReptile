@@ -1,33 +1,21 @@
 import { Fragment, PureComponent } from 'react'
+import dynamic from 'next/dynamic'
 
 import Head from './head'
-import dynamic from 'next/dynamic'
-import Containers from '../containers'
-import Nav from '../containers/nav'
-import Search from '../containers/search'
-
-import '../less/base.less'
-import '../less/public/common.less'
-
-const ListWithNoSSR = dynamic(() => import('../containers/list'), {
+const ContainersWithNoSSR = dynamic(() => import('../containers'), {
     loading: () => <p></p>,
     ssr: false
 })
 
-class Home extends PureComponent {
-    componentDidMount() {
-        
-    }
+import '../less/base.less'
+import '../less/public/common.less'
 
+class Home extends PureComponent {
     render() {
         return (
             <Fragment>
                 <Head />
-                <Containers>
-                    <Nav />
-                    <Search />
-                    <ListWithNoSSR />
-                </Containers>
+                <ContainersWithNoSSR />
             </Fragment>
         )
     }

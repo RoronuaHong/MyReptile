@@ -30,10 +30,6 @@ const rowList = [{
     id: 7,
     name: '职位详情',
     match: 'jobRequirement'
-}, {
-    id: 100,
-    name: '公司网址',
-    match: 'url'
 }]
 
 const color = ['#aaa', '#999', '#888', '#777', '#666', '#555', '#444', '#333', '#222']

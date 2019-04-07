@@ -19,9 +19,13 @@ const urlMethods = {
 }
 
 const jobMethods = {
-    findAlljob: () => {
+    findAlljob: option => {
         return new Promise((reslove, reject) => {
-            Job.find({}, (err, results) => {
+            const reg = new RegExp(option.keywords, 'i')
+
+            Job.find({
+                'job.jobRequirement': reg
+            }, (err, results) => {
                 reslove(results)
             })
         })

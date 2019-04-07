@@ -1,16 +1,14 @@
 import { PureComponent } from 'react'
-import { rowList, color } from '../../constants/list'
 import { Row, Col, Layout } from 'antd'
-import { getList } from '../../api/boss'
+
+import { utils } from '../../utils'
+import { rowList, color } from '../../constants/list'
 
 const { Content } = Layout
 
-const renderList = list => list.map((item, i) => {
+const renderList = (list, keywords) => list.map((item, i) => {
     const rowLists = rowList.map(m => {
         switch(m.match) {
-            case 'url':
-                m.detail = item.url
-                break
             case 'releaseTime': 
                 m.detail = item.detail.releaseTime
                 break
@@ -28,6 +26,7 @@ const renderList = list => list.map((item, i) => {
                 break
             case 'jobName': 
                 m.detail = item.job.jobName
+                m.url = item.url
                 break
             case 'jobRequirement': 
                 m.detail = item.job.jobRequirement
@@ -41,40 +40,37 @@ const renderList = list => list.map((item, i) => {
     })
 
     const renderRowList = rowLists.map(l => (
-        l.id !== 100 && <Row type='flex' key={l.id}>
+        <Row type='flex' key={l.id}>
             <Col span={3} className='name'>
                 {l.name} :
             </Col>
             <Col span={21} className='detail' style={{ background: color[l.id] }}>
-                {l.detail}
+                {l.id === 0 ?
+                    <a className='job-url' target='_blank' href={l.url}>{l.detail}</a> : 
+                    l.id !== 7 ? l.detail : <div dangerouslySetInnerHTML={utils.makeHighLight(l.detail, keywords)}></div>
+                }
             </Col>
-        </Row>
+        </Row> 
     ))
 
     return <li key={item.url}>{renderRowList}</li>
 })
 
 export default class List extends PureComponent {
-    state = {
-        list: []
-    }
-
-    async componentDidMount() {
-        const option = await getList()
-
-        this.setState({ list: option.data })
-    }
-
     render() {
-        const { list } = this.state
-        const renderLists = renderList(list)
+        const { list, keywords } = this.props
+        const renderLists = renderList(list, keywords)
 
         return (
             <Content>
                 <div className='list-box'>
-                    <ul className='list-detail'>
-                        {renderLists}
-                    </ul>
+                    {renderLists.length <= 0 ? 
+                        <div className='empty-box'>
+                            <div className='title'></div>
+                            <div className='content'>请输入筛选词进行搜索, 多个筛选词用空格(" ")或竖线("|")隔开</div>
+                        </div> : 
+                        <ul className='list-detail'>{renderLists}</ul>
+                    }
                 </div>
             </Content>
         )

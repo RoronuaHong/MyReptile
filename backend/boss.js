@@ -6,13 +6,22 @@ const { jobMethods } = require(`../mongodb/boss/methods`)
 const app = express()
 
 app.use(cors())
-app.use(cors())
-app.use(cors())
+
+app.all('*', function (req, res, next) {
+    req.header('Accept', 'application/json, text/plain, */*')
+    res.header('Content-Type', 'application/json;charset=UTF-8')
+
+    next()
+})
 
 app.get('/boss/list', (req, res, next) => {
-    const result = jobMethods.findAlljob()
+    //切割关键字
+    const keywordArr = req.query.keywords ? (req.query.keywords.trim()).split(/\s/) || (req.query.keywords.trim()).split('|') : []
+    const result = jobMethods.findAlljob({
+        keywords: keywordArr[0] || ''
+    })
 
-    result.then( data=> {
+    result.then(data=> {
         res.json({
             success: true,
             data
